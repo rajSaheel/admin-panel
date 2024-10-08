@@ -7,13 +7,12 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
-    const gateway = process.env.ADMIN_USERS_URL
+    const gateway = process.env.REACT_APP_ADMIN_API_URL
     // Fetch users from the backend
     useEffect(() => {
         const fetchUsers = async () => {
-            console.log(gateway)
             try {
-                const response = await axios.get(process.env.REACT_APP_API_URL);
+                const response = await axios.get(gateway);
                 setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);
@@ -21,12 +20,12 @@ const UserManagement = () => {
         };
 
         fetchUsers();
-    }, []);
+    }, [gateway]);
 
     // Handle block/unblock user
     const handleBlockUnblock = async (chatId, isBlocked) => {
         try {
-            await axios.patch(`http://localhost:5000/admin/users/${chatId}`, { blocked: !isBlocked });
+            await axios.patch(`${gateway}${chatId}`, { blocked: !isBlocked });
             setUsers(users.map(user =>
                 user.chatId === chatId ? { ...user, blocked: !isBlocked } : user
             ));
@@ -38,7 +37,7 @@ const UserManagement = () => {
     // Handle delete user
     const handleDeleteUser = async (chatId) => {
         try {
-            await axios.delete(`http://localhost:5000/admin/users/${chatId}`);
+            await axios.delete(`${gateway}${chatId}`);
             setUsers(users.filter(user => user.chatId !== chatId));
         } catch (error) {
             console.error('Error deleting user:', error);

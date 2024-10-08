@@ -10,11 +10,11 @@ const Settings = () => {
         about: '',
     });
     const [loading, setLoading] = useState(true);
-
+    const gateway = process.env.REACT_APP_BOT_API_URL
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/botsettings');
+                const response = await axios.get(gateway);
                 setSettings(response.data);
             } catch (error) {
                 console.error('Error fetching bot settings:', error);
@@ -24,7 +24,7 @@ const Settings = () => {
         };
 
         fetchSettings();
-    }, []);
+    }, [gateway]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -38,7 +38,7 @@ const Settings = () => {
         event.preventDefault();
 
         try {
-            await axios.patch('http://localhost:5000/botsettings', settings);
+            await axios.patch(gateway, settings);
             alert('Settings updated successfully');
         } catch (error) {
             console.error('Error updating bot settings:', error);
