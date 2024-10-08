@@ -16,7 +16,7 @@ const Login = () => {
     }, [navigate])
 
     const handleLogin = () => {
-        window.location.href = 'http://localhost:5000/admin/google/login';
+        window.location.href = process.env.REACT_APP_ADMIN_LOGIN_URL;
     };
 
     return (
