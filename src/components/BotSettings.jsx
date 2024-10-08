@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Grid, Typography, Card, CardContent } from '@mui/material';
+import { TextField, Button, Grid, Card, CardContent } from '@mui/material';
 import axios from 'axios';
 
 const Settings = () => {
     const [settings, setSettings] = useState({
         apiKey: '',
-        botDescription: ''
+        botDescription: '',
+        botName: '',
+        about: '',
     });
     const [loading, setLoading] = useState(true);
 
-    // Fetch current bot settings when the component loads
     useEffect(() => {
-        axios.get('/admin/bot-settings')
+        axios.get('http://localhost:5000/botsettings')
             .then(response => {
                 setSettings(response.data);
                 setLoading(false);
@@ -22,7 +23,6 @@ const Settings = () => {
             });
     }, []);
 
-    // Handle form field change
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setSettings({
@@ -31,10 +31,9 @@ const Settings = () => {
         });
     };
 
-    // Submit the updated settings
     const handleSubmit = (event) => {
         event.preventDefault();
-        axios.post('/admin/bot-settings', settings)
+        axios.patch('http://localhost:5000/botsettings', settings)
             .then(response => {
                 alert('Settings updated successfully');
             })
@@ -47,7 +46,7 @@ const Settings = () => {
 
     return (
         <div>
-            <Typography variant="h4" gutterBottom>Bot Settings</Typography>
+            <h2>User Management</h2>
 
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
@@ -66,7 +65,39 @@ const Settings = () => {
                         </Card>
                     </Grid>
 
-                    {/* Bot Description Field */}
+                    {/* Bot Name */}
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardContent>
+                                <TextField
+                                    label="Bot Name"
+                                    name="botName"
+                                    fullWidth
+                                    value={settings.botName}
+                                    onChange={handleInputChange}
+                                />
+                            </CardContent>
+                        </Card>
+                    </Grid>
+
+                    {/* Bot About */}
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardContent>
+                                <TextField
+                                    label="About"
+                                    name="about"
+                                    fullWidth
+                                    multiline
+                                    rows={2}
+                                    value={settings.about}
+                                    onChange={handleInputChange}
+                                />
+                            </CardContent>
+                        </Card>
+                    </Grid>
+
+                    {/* Bot Description */}
                     <Grid item xs={12}>
                         <Card>
                             <CardContent>
