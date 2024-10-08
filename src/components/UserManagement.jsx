@@ -10,33 +10,38 @@ const UserManagement = () => {
 
     // Fetch users from the backend
     useEffect(() => {
-        axios.get('http://localhost:5000/admin/users')
-            .then(response => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/admin/users');
                 setUsers(response.data);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching users:', error);
-            });
+            }
+        };
+
+        fetchUsers();
     }, []);
 
     // Handle block/unblock user
-    const handleBlockUnblock = (chatId, isBlocked) => {
-        axios.patch(`http://localhost:5000/admin/users/${chatId}`, { blocked: !isBlocked })
-            .then(() => {
-                setUsers(users.map(user =>
-                    user.chatId === chatId ? { ...user, blocked: !isBlocked } : user
-                ));
-            })
-            .catch(error => console.error('Error updating user status:', error));
+    const handleBlockUnblock = async (chatId, isBlocked) => {
+        try {
+            await axios.patch(`http://localhost:5000/admin/users/${chatId}`, { blocked: !isBlocked });
+            setUsers(users.map(user =>
+                user.chatId === chatId ? { ...user, blocked: !isBlocked } : user
+            ));
+        } catch (error) {
+            console.error('Error updating user status:', error);
+        }
     };
 
     // Handle delete user
-    const handleDeleteUser = (chatId) => {
-        axios.delete(`http://localhost:5000/admin/users/${chatId}`)
-            .then(() => {
-                setUsers(users.filter(user => user.chatId !== chatId));
-            })
-            .catch(error => console.error('Error deleting user:', error));
+    const handleDeleteUser = async (chatId) => {
+        try {
+            await axios.delete(`http://localhost:5000/admin/users/${chatId}`);
+            setUsers(users.filter(user => user.chatId !== chatId));
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
     };
 
     return (

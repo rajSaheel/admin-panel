@@ -12,15 +12,18 @@ const Settings = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:5000/botsettings')
-            .then(response => {
+        const fetchSettings = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/botsettings');
                 setSettings(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error fetching bot settings:', error);
+            } finally {
                 setLoading(false);
-            });
+            }
+        };
+
+        fetchSettings();
     }, []);
 
     const handleInputChange = (event) => {
@@ -31,16 +34,17 @@ const Settings = () => {
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        axios.patch('http://localhost:5000/botsettings', settings)
-            .then(response => {
-                alert('Settings updated successfully');
-            })
-            .catch(error => {
-                console.error('Error updating bot settings:', error);
-            });
+
+        try {
+            await axios.patch('http://localhost:5000/botsettings', settings);
+            alert('Settings updated successfully');
+        } catch (error) {
+            console.error('Error updating bot settings:', error);
+        }
     };
+
 
     if (loading) return <p>Loading...</p>;
 
