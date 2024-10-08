@@ -7,12 +7,13 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 
 const UserManagement = () => {
     const [users, setUsers] = useState([]);
-
+    const gateway = process.env.ADMIN_USERS_URL
     // Fetch users from the backend
     useEffect(() => {
         const fetchUsers = async () => {
+            console.log(gateway)
             try {
-                const response = await axios.get('http://localhost:5000/admin/users');
+                const response = await axios.get(process.env.REACT_APP_API_URL);
                 setUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);

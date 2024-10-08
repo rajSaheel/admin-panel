@@ -4,7 +4,6 @@ import Login from "./components/Login"
 import Dashboard from "./components/Dashboard"
 import BotSettings from "./components/BotSettings"
 import UserManagement from "./components/UserManagement"
-// import { useState } from "react"
 
 function App() {
     return (
