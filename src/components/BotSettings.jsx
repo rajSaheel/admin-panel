@@ -50,7 +50,7 @@ const Settings = () => {
 
     return (
         <div>
-            <h2>User Management</h2>
+            <h2>Bot Management</h2>
 
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
